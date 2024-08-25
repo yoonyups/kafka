@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Problem Answer Checker with Audio</title>
+    <style>
+        .image-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 50%;
+            left: 10%; /* Move the image slightly to the right */
+            transform: translateY(-50%);
+            height: auto;
+            width: auto;
+            max-height: 100%;
+            max-width: 50%;
+            pointer-events: none;
+            opacity: 0.5; /* 50% transparency */
+        }
+    </style>
+</head>
+<body>
+
+<h2>Select a Math Problem and Input Your Answer</h2>
+
+<!-- Dropdown to select a math problem -->
+<label for="problemSelect">Choose a problem:</label>
+<select id="problemSelect" onchange="displayProblem()">
+  <option value="1">Problem 1</option>
+  <option value="2">Problem 2</option>
+  <option value="3">Problem 3</option>
+  <option value="4">Problem 4</option>
+  <option value="5">Problem 5</option>
+</select>
+
+<br><br>
+
+<!-- Container to display the selected math problem image -->
+<div id="problemDisplay" class="image-container"></div>
+
+<!-- Audio controls -->
+<audio id="problemAudio" controls>
+    Your browser does not support the audio element.
+</audio>
+
+<br>
+
+<!-- Input field for the student to enter their answer -->
+<label for="answer">Your Answer:</label>
+<input type="text" id="answer">
+
+<br><br>
+
+<!-- Button to submit the answer -->
+<button onclick="submitAnswer()">Submit Answer</button>
+
+<!-- Display the result (O or X) -->
+<div id="result"></div>
+
+<script>
+// Array to store the correct answers for the problems
+const correctAnswers = ["1", "2", "3", "4", "5"];
+
+function displayProblem() {
+    let problemNumber = document.getElementById("problemSelect").value;
+    let problemDisplay = document.getElementById("problemDisplay");
+    let problemAudio = document.getElementById("problemAudio");
+
+    // Display the selected problem image
+    problemDisplay.innerHTML = '<img src="cs' + problemNumber + '.jpg" alt="Problem ' + problemNumber + '" />';
+
+    // Set the audio source and play it
+    problemAudio.src = 'cs' + problemNumber + '.mp3';
+    problemAudio.play();
+}
+
+function submitAnswer() {
+    let problemNumber = document.getElementById("problemSelect").value;
+    let answer = document.getElementById("answer").value.trim();
+    let resultDisplay = document.getElementById("result");
+    let problemDisplay = document.getElementById("problemDisplay");
+
+    // Clear previous overlay
+    problemDisplay.innerHTML = '<img src="cs' + problemNumber + '.jpg" alt="Problem ' + problemNumber + '" />';
+
+    // Get the correct answer for the selected problem
+    let correctAnswer = correctAnswers[problemNumber - 1];
+
+    // Determine which overlay image to use
+    let overlayImage = (answer === correctAnswer) ? 'O.jpg' : 'X.jpg';
+
+    // Add overlay image on top of the problem image
+    problemDisplay.innerHTML += '<img src="' + overlayImage + '" alt="Result" class="overlay" />';
+
+    // Display feedback message
+    resultDisplay.innerHTML = "You selected Problem " + problemNumber + " and your answer is: " + answer;
+}
+</script>
+
+</body>
+</html>
